@@ -13,7 +13,8 @@ namespace PDFworker
 
         static void ShowHelp()
         {
-            Console.WriteLine("usage: PDFworker /r sourcefile.pdf destinationfile.pdf startPage endPage");
+            Console.WriteLine("obracanie stron\nPDFworker /r sourcefile.pdf destinationfile.pdf startPage endPage");
+            Console.WriteLine("kopiowanie stron\nPDFworker /c sourcefile.pdf destinationfile.pdf startPage endPage");
         }
         static void Main(string[] args)
         {
@@ -24,6 +25,8 @@ namespace PDFworker
                 Environment.Exit(0);
             }
 
+            int startPage = 0;
+            int endPage = 0;
 
             switch (args[0])
             {
@@ -37,12 +40,27 @@ namespace PDFworker
                         break;
                     }
 
-                    int startPage = Convert.ToInt32(args[3]);
-                    int endPage = Convert.ToInt32(args[4]);
-
+                    startPage = Convert.ToInt32(args[3]);
+                    endPage = Convert.ToInt32(args[4]);
+                
                     PDFworkerClass.RotatePages(args[1], args[2], startPage, endPage);
 
 
+                    break;
+
+                case "/c":
+                case "-c":
+
+                    if (args.Length < 5)
+                    {
+                        ShowHelp();
+                        break;
+                    }
+
+                    startPage = Convert.ToInt32(args[3]);
+                    endPage = Convert.ToInt32(args[4]);
+
+                    PDFworkerClass.CopyPages(args[1], args[2], startPage, endPage);
                     break;
                 default:
                     ShowHelp();

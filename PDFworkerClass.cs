@@ -78,7 +78,42 @@ namespace PDFworker
 
 
 
+        public static void CopyPages(string inputFile, string outputFile,
+  int start, int end)
+        {
+            PdfReader inputPdf = new PdfReader(inputFile);
+            PdfReader.unethicalreading = true;
+            // retrieve the total number of pages
+            int pageCount = inputPdf.NumberOfPages;
 
+            if (end < start || end > pageCount)
+            {
+                end = pageCount;
+            }
+
+
+            using (var output = new MemoryStream())
+            {
+                var document = new Document();
+                var writer = new PdfCopy(document, output);
+                document.Open();
+                foreach (var file in new[] { inputFile })
+                {
+                    var reader = new PdfReader(file);
+                    PdfReader.unethicalreading = true;
+                    PdfImportedPage page;
+                    for (int p = start; p <= end; p++)
+                    {
+                        page = writer.GetImportedPage(reader, p);
+                        writer.AddPage(page);
+                    }
+                }
+                document.Close();
+                File.WriteAllBytes(outputFile, output.ToArray());
+            }
+
+
+        }
 
 
 
