@@ -30,6 +30,12 @@ namespace PDFworker
 
             switch (args[0])
             {
+
+                case "/t":
+
+                    PDFworkerClass.Test(args[1], args[2]);
+
+                    break;
                 case "/r":
                 case "-r":
 

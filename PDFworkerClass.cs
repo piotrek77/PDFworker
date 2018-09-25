@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using iTextSharp;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
+using iTextSharp.text.pdf.parser;
 
 namespace PDFworker
 {
@@ -78,6 +79,56 @@ namespace PDFworker
 
 
 
+        public static void Test(string inputFile, string outputFile)
+        {
+            Console.WriteLine("Test");
+            String formFile = inputFile;
+            String newFile = outputFile;
+
+            PdfReader reader = new PdfReader(formFile);
+            PdfDictionary dict = reader.GetPageN(1);
+            foreach (var v in dict)
+            {
+                Console.WriteLine("{0}", v);
+            }
+            PdfObject obj = dict.GetDirectObject(PdfName.CONTENTS);
+
+            if (obj is PRStream stream)
+            {
+                byte[] data = PdfReader.GetStreamBytes(stream);
+
+                string dd = System.Text.Encoding.ASCII.GetString(data);
+
+                Console.WriteLine(dd);
+
+                stream.SetData(Encoding.ASCII.GetBytes(dd));
+
+            }
+
+            //PdfStamper stamper = new PdfStamper(reader, new FileStream(newFile, FileMode.Create));
+
+            //AcroFields fields = reader.AcroFields;   //  stamper.AcroFields;
+
+
+
+            //foreach(var v in fields.Fields)
+            //{
+            //    Console.WriteLine("{0}", v);
+            //}
+            // set form fields
+
+            //fields.SetField("{TO}", "John Doe");
+
+            //fields.SetField("{FROM}", "2 Milky Way, London");
+
+            //stamper.FormFlattening = true;
+
+            //stamper.Close();
+
+            reader.Close();
+        }
+
+
         public static void CopyPages(string inputFile, string outputFile,
   int start, int end)
         {
@@ -117,7 +168,33 @@ namespace PDFworker
 
 
 
+
+
+
+
+
+
     }
+
+
+
+
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 }
